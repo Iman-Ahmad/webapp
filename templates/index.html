@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Real-Time RSL Detection</title>
+    <style>
+        video, canvas {
+            display: block;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Detected Sign: <span id="prediction">None</span></h1>
+
+<video id="video" width="640" height="480" autoplay muted></video>
+
+<script>
+    const video = document.getElementById('video');
+    const predictionText = document.getElementById('prediction');
+
+    // Access the webcam
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then((stream) => {
+            video.srcObject = stream;
+        })
+        .catch((err) => {
+            console.error("Error accessing the camera: ", err);
+        });
+
+    // Create a canvas to capture frames
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+
+    function captureFrameAndSend() {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        // Convert the frame to base64
+        const imageBase64 = canvas.toDataURL('image/jpeg');
+
+        // Send the frame to the backend
+        fetch('/predict', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ image: imageBase64 })
+        })
+        .then(response => response.json())
+        .then(data => {
+            predictionText.textContent = data.prediction || "None";
+        })
+        .catch(error => {
+            console.error('Error during fetch:', error);
+        });
+    }
+
+    // Capture frame every 1 second
+    setInterval(captureFrameAndSend, 1000);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,6 @@
+tensorflow
+mediapipe
+flask
+numpy
+joblib
+scikit-learn
