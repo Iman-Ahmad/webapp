@@ -1,0 +1,29 @@
+name: CI Pipeline
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18.x'
+      - name: Install dependencies
+        run: npm install
+      - name: Install framework dependencies
+        run: npm run fw-install
+      - name: Generate code with Mitosis
+        run: cd apps/components && npm install && npm run build
+      - name: Build all projects
+        run: npm run build
+      - name: Measure performance
+        run: npm run measure
