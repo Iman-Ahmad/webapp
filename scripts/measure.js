@@ -1,6 +1,7 @@
 import { $ } from 'zx';
 import chalk from 'chalk';
-import { fs } from 'fs-extra';
+import pkg from 'fs-extra';
+const { fs } = pkg;
 import path from 'path';
 import lighthouse from 'lighthouse';
 import { launch } from 'chrome-launcher';

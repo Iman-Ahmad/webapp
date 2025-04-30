@@ -1,4 +1,5 @@
-import { fs } from 'fs-extra';
+import pkg from 'fs-extra';
+const { fs } = pkg;  // Destructure fs from the default export
 
 const FRAMEWORKS = process.env.FRAMEWORKS?.split(',');
 
