@@ -1,10 +1,11 @@
-import { fs } from 'zx';
+import { fs } from 'fs-extra';
 
 const FRAMEWORKS = process.env.FRAMEWORKS?.split(',');
 
-const IGNORE_FRAMEWORKS = (['.DS_Store'] as string[]).concat(
-  process.env.IGNORE_FRAMEWORKS ? process.env.IGNORE_FRAMEWORKS.split(',') : []
-);
+const IGNORE_FRAMEWORKS = ['.DS_Store'].concat(
+    process.env.IGNORE_FRAMEWORKS ? process.env.IGNORE_FRAMEWORKS.split(',') : []
+  );
+
 
 // Get the list of frameworks to test
 export async function getFrameworks() {
