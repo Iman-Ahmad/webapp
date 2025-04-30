@@ -1,0 +1,37 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [master]  
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest 
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4 
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3 
+        with:
+          node-version: '18.x'
+
+      - name: Install project dependencies
+        run: npm install
+
+      - name: Install framework dependencies
+        run: npm run fw-install
+
+      - name: Generate components with Mitosis
+        working-directory: ./apps/components 
+        run: |
+          npm install
+          npm run build
+
+      - name: Build all projects
+        run: npm run build
+
+      - name: Measure performance with Lighthouse
+        run: npm run measure
