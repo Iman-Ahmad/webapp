@@ -24,3 +24,5 @@ def get_deploy_configs() -> List[str]:
 
 if __name__ == "__main__":
     print("Available configs:", get_deploy_configs())
+
+    
