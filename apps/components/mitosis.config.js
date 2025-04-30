@@ -1,7 +1,7 @@
 // mitosis.config.js
-import { defineConfig } from '@builder.io/mitosis/config';
+const { defineConfig } = require('@builder.io/mitosis/config');
 
-export default defineConfig({
+module.exports = defineConfig({
   files: 'src/**/*.lite.tsx',
   targets: [
     { 
