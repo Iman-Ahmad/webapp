@@ -43,8 +43,8 @@
     },
     "resolutions": {
         "inflight": "npm:lru-cache@^9.0.0",
-        "rimraf": "^4.0.0",
-        "glob": "^9.0.0"
+        "rimraf": "^6.0.1",
+        "glob": "^11.0.2"
     }
 
 }
