@@ -11,15 +11,61 @@
         h1 {
             text-align: center;
         }
+        .phrase-container {
+            margin: 20px auto;
+            padding: 15px;
+            background: gray;
+            border-radius: 8px;
+            max-width: 600px;
+        }
+
+        #phrase-history {
+            font-size: 1.5em;
+            color: #00ff9d;
+            min-height: 40px;
+            padding: 10px;
+            border: 1px solid #00ff9d33;
+            border-radius: 5px;
+        }
+
+        #clear-phrase {
+            margin-top: 10px;
+            padding: 8px 16px;
+            background: #00ff9d;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
-<h1>Detected Sign: <span id="prediction">None</span></h1>
+<div class="container">
 
-<video id="video" width="640" height="480" autoplay muted></video>
+    <h1>обнаруженный признак: <span id="prediction">None</span></h1>
+
+    <div class="video-container">
+        <video id="video" width="640" height="480" autoplay muted></video>
+    </div>
+
+    <div class="phrase-container">
+        <div id="phrase-history"></div>
+        <button id="clear-phrase">Clear Phrase</button>
+    </div>
+
+</div>
 
 <script>
+    let phraseHistory = [];
+        const phraseElement = document.getElementById('phrase-history');
+        const clearButton = document.getElementById('clear-phrase');
+    
+    // Clear phrase functionality
+    clearButton.addEventListener('click', () => {
+            phraseHistory = [];
+            phraseElement.textContent = '';
+        });
+
     const video = document.getElementById('video');
     const predictionText = document.getElementById('prediction');
 
@@ -52,7 +98,12 @@
         })
         .then(response => response.json())
         .then(data => {
-            predictionText.textContent = data.prediction || "None";
+            const prediction = data.prediction || "None";
+            predictionText.textContent = prediction;
+            if (prediction !== "None" && prediction !== "No hands detected" && phraseHistory[phraseHistory.length - 1] !== prediction) {
+                phraseHistory.push(prediction);
+                phraseElement.textContent = phraseHistory.join(' ');
+            }
         })
         .catch(error => {
             console.error('Error during fetch:', error);

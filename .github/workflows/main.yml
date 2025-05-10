@@ -1,52 +1,29 @@
-name: CI Pipeline
+name: Python Backend CI
 
 on:
   push:
-    branches: [master]
+    branches: [main]
   pull_request:
-    branches: [master]
+    branches: [main]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./  # Explicitly set root directory
 
     steps:
-      # 1. Checkout FIRST to get package.json
-      - name: Check out repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. Set up Node.js
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
-          node-version: '18.x'
+          python-version: '3.9'
 
-      # 3. Install pnpm globally
-      - name: Install pnpm
-        run: npm install -g pnpm
-
-      # 4. Install root dependencies (from your root package.json)
-      - name: Install project dependencies
-        run: npm install
-
-      # 5. Install framework dependencies
-      - name: Install framework dependencies
-        run: npm run fw-install
-
-      # 6. Generate components with Mitosis
-      - name: Generate components with Mitosis
-        working-directory: ./apps/components
+      - name: Install dependencies
         run: |
-          npm install
-          npm run build
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-      # 7. Build all projects
-      - name: Build all projects
-        run: npm run build
-
-      # 8. Measure performance
-      - name: Measure performance with Lighthouse
-        run: npm run measure
+      - name: Test model prediction (optional)
+        run: |
+          python -c "import tensorflow as tf; print(tf.__version__)"
